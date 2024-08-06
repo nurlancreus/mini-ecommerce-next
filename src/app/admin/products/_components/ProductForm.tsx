@@ -6,11 +6,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/formatters";
 import { useState } from "react";
-import { addProduct } from "../../_actions/products";
+import { addProduct, updateProduct } from "../../_actions/products";
 import { useFormState, useFormStatus } from "react-dom";
+import { Product } from "@prisma/client";
 
-export default function ProductForm() {
-  const [error, action] = useFormState(addProduct, {});
+export default function ProductForm({ product }: { product?: Product | null }) {
+  const [error, action] = useFormState(
+    product ? updateProduct.bind(null, product.id) : addProduct,
+    {},
+  );
   const [priceInCents, setPriceInCents] = useState<number>();
 
   return (
